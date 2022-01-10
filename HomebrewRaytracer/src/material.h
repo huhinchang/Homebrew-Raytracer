@@ -8,86 +8,87 @@
 
 struct RaycastHit;
 
-class material
+class Material
 {
 public:
-	virtual bool scatter(const Ray& r_in, const RaycastHit& rec, color& attenuation, Ray& scattered) const = 0;
+	// if false, ray was absorbed.
+	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered) const = 0;
 };
 
-class lambertian : public material
+class Diffuse : public Material
 {
 public:
-	lambertian(const color& a) : albedo(a) {}
+	Diffuse(const color& albedo) : _albedo{ albedo } {}
 
-	virtual bool scatter(const Ray& r_in, const RaycastHit& rec, color& attenuation, Ray& scattered) const override
+	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered) const override
 	{
-		auto scatter_direction = rec.Normal + RandomUnitVector();
+		auto scatterDir = incidentRayHitInfo.Normal + RandomUnitVector();
+		if (scatterDir.SqrMagnitude() < 1e-4)
+			scatterDir = incidentRayHitInfo.Normal;
 
-		// Catch degenerate scatter direction
-		if (scatter_direction.near_zero())
-			scatter_direction = rec.Normal;
-
-		scattered = Ray(rec.Point, scatter_direction);
-		attenuation = albedo;
+		scattered = Ray(incidentRayHitInfo.Point, scatterDir);
+		albedo = _albedo;
 		return true;
 	}
 
 public:
-	color albedo;
+	color _albedo;
 };
 
-class metal : public material
+class Metal : public Material
 {
 public:
-	metal(const color& a, double f) : albedo(a), fuzz(f < 1 ? f : 1) {}
+	Metal(const color& albedo, double roughness) : _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
 
-	virtual bool scatter(
-		const Ray& r_in, const RaycastHit& rec, color& attenuation, Ray& scattered
+	virtual bool Scatter(
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
 	) const override
 	{
-		Vector3 reflected = reflect(Normalized(r_in.Direction()), rec.Normal);
-		scattered = Ray(rec.Point, reflected + fuzz * RandomInUnitSphere());
-		attenuation = albedo;
-		return (Dot(scattered.Direction(), rec.Normal) > 0);
+		auto reflected = ReflectAlongNormal(Normalized(incidentRay.Direction()), incidentRayHitInfo.Normal);
+		scattered = Ray(incidentRayHitInfo.Point, reflected + _roughness * RandomInUnitSphere());
+		albedo = _albedo;
+
+		// if scattered ray is below surface, absorb
+		return (Dot(scattered.Direction(), incidentRayHitInfo.Normal) > 0);
 	}
-
-public:
-	color albedo;
-	double fuzz;
-};
-
-class dielectric : public material
-{
-public:
-	dielectric(double index_of_refraction) : ir(index_of_refraction) {}
-
-	virtual bool scatter(
-		const Ray& r_in, const RaycastHit& rec, color& attenuation, Ray& scattered
-	) const override
-	{
-		attenuation = color(1.0, 1.0, 1.0);
-		double refraction_ratio = rec.IsNormalOutward ? (1.0 / ir) : ir;
-
-		Vector3 unit_direction = Normalized(r_in.Direction());
-		double cos_theta = fmin(Dot(-unit_direction, rec.Normal), 1.0);
-		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
-
-		bool cannot_refract = refraction_ratio * sin_theta > 1.0;
-		Vector3 direction;
-
-		if (cannot_refract || reflectance(cos_theta, refraction_ratio) > RandomDouble())
-			direction = reflect(unit_direction, rec.Normal);
-		else
-			direction = refract(unit_direction, rec.Normal, refraction_ratio);
-
-		scattered = Ray(rec.Point, direction);
-		return true;
-	}
-
-public:
-	double ir; // Index of Refraction
 
 private:
+	color _albedo;
+	double _roughness;
+};
+
+class Glass : public Material
+{
+public:
+	Glass(double ior, color albedo = color(1.0, 1.0, 1.0)) : _ior(ior), _albedo{ albedo } {}
+
+	virtual bool Scatter(
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
+	) const override
+	{
+		albedo = _albedo;
+		double refractionRatio = incidentRayHitInfo.IsNormalOutward ? (1.0 / _ior) : _ior;
+
+		Vector3 unit_direction = incidentRay.Direction();
+		double cos_theta = fmin(Dot(-unit_direction, incidentRayHitInfo.Normal), 1.0);
+		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+		bool cannot_refract = refractionRatio * sin_theta > 1.0;
+		Vector3 direction;
+
+		if (cannot_refract || reflectance(cos_theta, refractionRatio) > RandomDouble())
+			direction = ReflectAlongNormal(unit_direction, incidentRayHitInfo.Normal);
+		else
+			direction = Refract(unit_direction, incidentRayHitInfo.Normal, refractionRatio);
+
+		scattered = Ray(incidentRayHitInfo.Point, direction);
+		return true;
+	}
+
+private:
+	color _albedo;
+	double _ior; // Index of Refraction
+
 	static double reflectance(double cosine, double ref_idx)
 	{
 		// Use Schlick's approximation for reflectance.

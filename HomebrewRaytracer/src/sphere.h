@@ -1,7 +1,6 @@
 #pragma once
 
-// this header contains the implementation of the sphere class. 
-// the funky math is explained in 6.2
+// this header contains the implementation of a sphere raycast collider
 
 #include "RaycastCollider.h"
 #include "Vector3.h"
@@ -9,8 +8,7 @@
 class Sphere : public RaycastCollider
 {
 public:
-	Sphere() {}
-	Sphere(point3 center, double radius, shared_ptr<material> material)
+	Sphere(point3 center, double radius, shared_ptr<Material> material)
 		: _center{ center }, _radius{ radius }, _material{ material }
 	{
 	};
@@ -20,7 +18,7 @@ public:
 private:
 	point3 _center;
 	double _radius;
-	shared_ptr<material> _material;
+	shared_ptr<Material> _material;
 };
 
 bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const

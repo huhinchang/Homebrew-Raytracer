@@ -25,7 +25,7 @@ color ray_color(const Ray& r, const RaycastCollider& world, int depth)
 	{
 		Ray scattered;
 		color attenuation;
-		if (rec.Material->scatter(r, rec, attenuation, scattered))
+		if (rec.Material->Scatter(r, rec, attenuation, scattered))
 			return attenuation * ray_color(scattered, world, depth - 1);
 		return color(0, 0, 0);
 	}
@@ -40,7 +40,7 @@ hittable_list random_scene()
 {
 	hittable_list world;
 
-	auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
+	auto ground_material = make_shared<Diffuse>(color(0.5, 0.5, 0.5));
 	world.add(make_shared<Sphere>(point3(0, -1000, 0), 1000, ground_material));
 
 	for (int a = -2; a < 2; a++)
@@ -52,13 +52,13 @@ hittable_list random_scene()
 
 			if ((center - point3(4, 0.2, 0)).Magnitude() > 0.9)
 			{
-				shared_ptr<material> sphere_material;
+				shared_ptr<Material> sphere_material;
 
 				if (choose_mat < 0.8)
 				{
 					// diffuse
 					auto albedo = color::Random() * color::Random();
-					sphere_material = make_shared<lambertian>(albedo);
+					sphere_material = make_shared<Diffuse>(albedo);
 					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 				else if (choose_mat < 0.95)
@@ -66,27 +66,26 @@ hittable_list random_scene()
 					// metal
 					auto albedo = color::Random(0.5, 1);
 					auto fuzz = RandomDouble(0, 0.5);
-					sphere_material = make_shared<metal>(albedo, fuzz);
+					sphere_material = make_shared<Metal>(albedo, fuzz);
 					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 				else
 				{
 					// glass
-					sphere_material = make_shared<dielectric>(1.5);
+					sphere_material = make_shared<Glass>(1.5);
 					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 			}
 		}
 	}
 
-	auto material1 = make_shared<dielectric>(1.5);
-	world.add(make_shared<Sphere>(point3(0, 1, 0), 1.0, material1));
+	auto glassMat = make_shared<Glass>(1.5, color(1, 0, 0));
+	auto diffuseMat = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
+	auto metalMat = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
 
-	auto material2 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
-	world.add(make_shared<Sphere>(point3(-4, 1, 0), 1.0, material2));
-
-	auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
-	world.add(make_shared<Sphere>(point3(4, 1, 0), 1.0, material3));
+	world.add(make_shared<Sphere>(point3(-4, 1, 0), 1.0, diffuseMat));
+	world.add(make_shared<Sphere>(point3(0, 1, 0), 1.0, metalMat));
+	world.add(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
 
 	return world;
 }

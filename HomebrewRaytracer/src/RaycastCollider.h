@@ -6,13 +6,13 @@
 #include "Ray.h"
 #include "Utils.h"
 
-class material;
+class Material;
 
 struct RaycastHit
 {
 	point3 Point;
 	Vector3 Normal;
-	shared_ptr<material> Material;
+	shared_ptr<Material> Material;
 	double t;
 	bool IsNormalOutward; // normals always point against ray
 

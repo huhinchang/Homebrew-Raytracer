@@ -9,7 +9,7 @@ class Ray
 public:
 	Ray() {}
 	Ray(const point3& origin, const Vector3& direction)
-		: _origin{ origin }, _direction{ direction }
+		: _origin{ origin }, _direction{ Normalized(direction) }
 	{
 	}
 

@@ -54,12 +54,6 @@ public:
 	{
 		return Vector3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
 	}
-
-	bool near_zero() const
-	{
-		const auto s = 1e-8;
-		return (fabs(x) < s) && (fabs(y) < s) && (fabs(z) < s);
-	}
 };
 
 // Type aliases for vec3
@@ -67,14 +61,6 @@ using point3 = Vector3;   // 3D point
 using color = Vector3;    // RGB color
 
 // vec3 Utility Functions
-/*
-
-inline std::ostream& operator<<(std::ostream &out, const vec3 &v)
-{
-	return out << v._x << ' ' << v._y << ' ' << v._z;
-}
-*/
-
 inline Vector3 operator+(const Vector3 &u, const Vector3 &v)
 {
 	return Vector3(u.x + v.x, u.y + v.y, u.z + v.z);
@@ -140,24 +126,13 @@ Vector3 RandomUnitVector()
 	return Normalized(RandomInUnitSphere());
 }
 
-/*
-vec3 random_in_hemisphere(const vec3& normal)
-{
-	vec3 in_unit_sphere = RandomInUnitSphere();
-	if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
-		return in_unit_sphere;
-	else
-		return -in_unit_sphere;
-}
-*/
-
-Vector3 reflect(const Vector3& v, const Vector3& n)
+Vector3 ReflectAlongNormal(const Vector3& v, const Vector3& n)
 {
 	return v - 2 * Dot(v, n)*n;
 }
 
 // ray tracing in one weekend 10.2 for derivation
-Vector3 refract(const Vector3& uv, const Vector3& n, double etai_over_etat)
+Vector3 Refract(const Vector3& uv, const Vector3& n, double etai_over_etat)
 {
 	auto cos_theta = fmin(Dot(-uv, n), 1.0);
 	Vector3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
