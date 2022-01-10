@@ -3,10 +3,10 @@
 // this header contains the implementation of the sphere class. 
 // the funky math is explained in 6.2
 
-#include "hittable.h"
+#include "RaycastCollider.h"
 #include "Vector3.h"
 
-class sphere : public hittable
+class sphere : public RaycastCollider
 {
 public:
 	sphere() {}
@@ -15,8 +15,8 @@ public:
 	{
 	};
 
-	virtual bool hit(
-		const Ray& r, double t_min, double t_max, hit_record& rec) const override;
+	virtual bool CheckCollision(
+		const Ray& r, double t_min, double t_max, RaycastHit& rec) const override;
 
 public:
 	point3 center;
@@ -24,7 +24,7 @@ public:
 	shared_ptr<material> mat_ptr;
 };
 
-bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const
+bool sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const
 {
 	Vector3 oc = r.origin() - center;
 	auto a = r.direction().SqrMagnitude();
@@ -45,11 +45,11 @@ bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) cons
 	}
 
 	rec.t = root;
-	rec.p = r.At(rec.t);
-	rec.normal = (rec.p - center) / radius;
-	Vector3 outward_normal = (rec.p - center) / radius;
-	rec.set_face_normal(r, outward_normal);
-	rec.mat_ptr = mat_ptr;
+	rec.Point = r.At(rec.t);
+	rec.Normal = (rec.Point - center) / radius;
+	Vector3 outward_normal = (rec.Point - center) / radius;
+	rec.SetNormal(r, outward_normal);
+	rec.Material = mat_ptr;
 
 	return true;
 }

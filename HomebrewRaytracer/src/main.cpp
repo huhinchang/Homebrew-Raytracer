@@ -6,26 +6,26 @@
 #include "hittable_list.h"
 #include "sphere.h"
 #include "camera.h"
-#include "hittable.h"
+#include "RaycastCollider.h"
 #include "material.h"
 
 // cd "C:\Users\user\Desktop\Other devs\HomebrewRaytracer\Debug"
 // "HomebrewRaytracer.exe" > ../Renders/asdf.ppm
 
-color ray_color(const Ray& r, const hittable& world, int depth)
+color ray_color(const Ray& r, const RaycastCollider& world, int depth)
 {
-	hit_record rec;
+	RaycastHit rec;
 
 	// If we've exceeded the ray bounce limit, no more light is gathered.
 	if (depth <= 0)
 		return color(0, 0, 0);
 
 	// sphere intersection
-	if (world.hit(r, 0.001, infinity, rec))
+	if (world.CheckCollision(r, 0.001, infinity, rec))
 	{
 		Ray scattered;
 		color attenuation;
-		if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+		if (rec.Material->scatter(r, rec, attenuation, scattered))
 			return attenuation * ray_color(scattered, world, depth - 1);
 		return color(0, 0, 0);
 	}
