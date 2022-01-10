@@ -11,7 +11,7 @@ struct hit_record;
 class material
 {
 public:
-	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const = 0;
+	virtual bool scatter(const Ray& r_in, const hit_record& rec, color& attenuation, Ray& scattered) const = 0;
 };
 
 class lambertian : public material
@@ -19,7 +19,7 @@ class lambertian : public material
 public:
 	lambertian(const color& a) : albedo(a) {}
 
-	virtual bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
+	virtual bool scatter(const Ray& r_in, const hit_record& rec, color& attenuation, Ray& scattered) const override
 	{
 		auto scatter_direction = rec.normal + RandomUnitVector();
 
@@ -27,7 +27,7 @@ public:
 		if (scatter_direction.near_zero())
 			scatter_direction = rec.normal;
 
-		scattered = ray(rec.p, scatter_direction);
+		scattered = Ray(rec.p, scatter_direction);
 		attenuation = albedo;
 		return true;
 	}
@@ -42,11 +42,11 @@ public:
 	metal(const color& a, double f) : albedo(a), fuzz(f < 1 ? f : 1) {}
 
 	virtual bool scatter(
-		const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered
+		const Ray& r_in, const hit_record& rec, color& attenuation, Ray& scattered
 	) const override
 	{
 		Vector3 reflected = reflect(Normalized(r_in.direction()), rec.normal);
-		scattered = ray(rec.p, reflected + fuzz * RandomInUnitSphere());
+		scattered = Ray(rec.p, reflected + fuzz * RandomInUnitSphere());
 		attenuation = albedo;
 		return (Dot(scattered.direction(), rec.normal) > 0);
 	}
@@ -62,7 +62,7 @@ public:
 	dielectric(double index_of_refraction) : ir(index_of_refraction) {}
 
 	virtual bool scatter(
-		const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered
+		const Ray& r_in, const hit_record& rec, color& attenuation, Ray& scattered
 	) const override
 	{
 		attenuation = color(1.0, 1.0, 1.0);
@@ -80,7 +80,7 @@ public:
 		else
 			direction = refract(unit_direction, rec.normal, refraction_ratio);
 
-		scattered = ray(rec.p, direction);
+		scattered = Ray(rec.p, direction);
 		return true;
 	}
 

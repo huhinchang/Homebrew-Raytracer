@@ -22,17 +22,13 @@ inline double Deg2Rad(double degrees)
 	return degrees * pi / 180.0;
 }
 
-inline double RandomDouble()
-{
-	static std::uniform_real_distribution<double> distribution(0.0, 1.0);
-	static std::mt19937 generator;
-	return distribution(generator);
-}
-
 // inclusive min, exclusive max
-inline double RandomDouble(double min, double max)
+inline double RandomDouble(double min = 0, double max = 1)
 {
-	return min + (max - min) * RandomDouble();
+	// https://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
+	std::random_device rd;  // Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+	std::uniform_real_distribution<> dis(min, max);
 }
 
 inline double Clamp(double x, double min, double max)

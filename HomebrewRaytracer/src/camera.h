@@ -35,12 +35,12 @@ public:
 	}
 
 	// returns a ray from the camera to the viewport coordinates
-	ray get_ray(double s, double t) const
+	Ray get_ray(double s, double t) const
 	{
 		Vector3 rd = lens_radius * random_in_unit_disk();
 		Vector3 offset = u * rd.x + v * rd.y;
 
-		return ray(
+		return Ray(
 			origin + offset,
 			lower_left_corner + s * horizontal + t * vertical - origin - offset
 		);

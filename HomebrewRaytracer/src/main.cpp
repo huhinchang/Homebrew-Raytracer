@@ -12,7 +12,7 @@
 // cd "C:\Users\user\Desktop\Other devs\HomebrewRaytracer\Debug"
 // "HomebrewRaytracer.exe" > ../Renders/asdf.ppm
 
-color ray_color(const ray& r, const hittable& world, int depth)
+color ray_color(const Ray& r, const hittable& world, int depth)
 {
 	hit_record rec;
 
@@ -23,7 +23,7 @@ color ray_color(const ray& r, const hittable& world, int depth)
 	// sphere intersection
 	if (world.hit(r, 0.001, infinity, rec))
 	{
-		ray scattered;
+		Ray scattered;
 		color attenuation;
 		if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
 			return attenuation * ray_color(scattered, world, depth - 1);
@@ -127,7 +127,7 @@ int main()
 				// u & v are random positions within the pixel
 				auto u = (i + RandomDouble()) / (image_width - 1);
 				auto v = (j + RandomDouble()) / (image_height - 1);
-				ray r = cam.get_ray(u, v);
+				Ray r = cam.get_ray(u, v);
 				pixel_color += ray_color(r, world, max_depth);
 			}
 			write_color(std::cout, pixel_color, samples_per_pixel);

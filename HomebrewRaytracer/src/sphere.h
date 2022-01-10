@@ -16,7 +16,7 @@ public:
 	};
 
 	virtual bool hit(
-		const ray& r, double t_min, double t_max, hit_record& rec) const override;
+		const Ray& r, double t_min, double t_max, hit_record& rec) const override;
 
 public:
 	point3 center;
@@ -24,7 +24,7 @@ public:
 	shared_ptr<material> mat_ptr;
 };
 
-bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) const
+bool sphere::hit(const Ray& r, double t_min, double t_max, hit_record& rec) const
 {
 	Vector3 oc = r.origin() - center;
 	auto a = r.direction().SqrMagnitude();
@@ -45,7 +45,7 @@ bool sphere::hit(const ray& r, double t_min, double t_max, hit_record& rec) cons
 	}
 
 	rec.t = root;
-	rec.p = r.at(rec.t);
+	rec.p = r.At(rec.t);
 	rec.normal = (rec.p - center) / radius;
 	Vector3 outward_normal = (rec.p - center) / radius;
 	rec.set_face_normal(r, outward_normal);

@@ -3,7 +3,7 @@
 // this header contains a abstract class to be inherited by all objects that should
 // intercept raycasts.
 
-#include "ray.h"
+#include "Ray.h"
 #include "Utils.h"
 
 class material;
@@ -16,7 +16,7 @@ struct hit_record
 	double t;
 	bool front_face;
 
-	inline void set_face_normal(const ray& r, const Vector3& outward_normal)
+	inline void set_face_normal(const Ray& r, const Vector3& outward_normal)
 	{
 		front_face = Dot(r.direction(), outward_normal) < 0;
 		normal = front_face ? outward_normal : -outward_normal;
@@ -26,5 +26,5 @@ struct hit_record
 class hittable
 {
 public:
-	virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const = 0;
+	virtual bool hit(const Ray& r, double t_min, double t_max, hit_record& rec) const = 0;
 };

@@ -4,24 +4,24 @@
 
 #include "Vector3.h"
 
-class ray
+class Ray
 {
 public:
-	ray() {}
-	ray(const point3& origin, const Vector3& direction)
-		: orig(origin), dir(direction)
+	Ray() {}
+	Ray(const point3& origin, const Vector3& direction)
+		: _origin{ origin }, _direction{ direction }
 	{
 	}
 
-	point3 origin() const { return orig; }
-	Vector3 direction() const { return dir; }
+	point3 origin() const { return _origin; }
+	Vector3 direction() const { return _direction; }
 
-	point3 at(double t) const
+	point3 At(double t) const
 	{
-		return orig + t * dir;
+		return _origin + t * _direction;
 	}
 
 public:
-	point3 orig;
-	Vector3 dir;
+	point3 _origin;
+	Vector3 _direction;
 };
