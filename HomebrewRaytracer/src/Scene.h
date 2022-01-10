@@ -19,27 +19,27 @@ public:
 	void Clear() { objects.clear(); }
 	void AddCollider(shared_ptr<RaycastCollider> raycastCollider) { objects.push_back(raycastCollider); }
 
-	virtual bool CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const override;
+	virtual bool CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const override;
 
-public:
+private:
 	std::vector<shared_ptr<RaycastCollider>> objects;
 };
 
-bool Scene::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const
+bool Scene::CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const
 {
 	RaycastHit temp_rec;
 	bool hitAnything = false;
-	auto tClosest = t_max;
+	auto tClosest = tMax;
 
 	for (const auto& object : objects)
 	{
-		if (object->CheckCollision(r, t_min, tClosest, temp_rec))
+		if (object->CheckCollision(ray, tMin, tClosest, temp_rec))
 		{
 			hitAnything = true;
 			tClosest = temp_rec.t;
 		}
 	}
 
-	rec = temp_rec;
+	hitInfo = temp_rec;
 	return hitAnything;
 }

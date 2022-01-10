@@ -21,7 +21,7 @@ public:
 		return _origin + t * _direction;
 	}
 
-public:
+private:
 	point3 _origin;
 	Vector3 _direction;
 };

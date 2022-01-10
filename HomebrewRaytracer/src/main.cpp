@@ -96,7 +96,7 @@ int main()
 	const auto aspect_ratio = 3.0 / 2.0;
 	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspect_ratio);
-	const int samples_per_pixel = 1;
+	const int samples_per_pixel = 5;
 	const int max_depth = 5;
 
 	// World
@@ -109,7 +109,7 @@ int main()
 	auto dist_to_focus = 10.0;
 	auto aperture = 0.1;
 
-	camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
+	Camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
 
 	// Render
 
@@ -126,7 +126,7 @@ int main()
 				// u & v are random positions within the pixel
 				auto u = (i + RandomDouble()) / (image_width - 1);
 				auto v = (j + RandomDouble()) / (image_height - 1);
-				Ray r = cam.get_ray(u, v);
+				Ray r = cam.ViewportToRay(u, v);
 				pixel_color += ray_color(r, world, max_depth);
 			}
 			WriteColor(std::cout, pixel_color, samples_per_pixel);

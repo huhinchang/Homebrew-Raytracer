@@ -4,13 +4,13 @@
 
 #include "Utils.h"
 
-class camera
+class Camera
 {
 public:
-	camera(
+	Camera(
 		point3 lookfrom,
 		point3 lookat,
-		Vector3   vup,
+		Vector3 vup,
 		double vfov, // vertical field-of-view in degrees
 		double aspect_ratio,
 		double aperture,
@@ -35,7 +35,7 @@ public:
 	}
 
 	// returns a ray from the camera to the viewport coordinates
-	Ray get_ray(double s, double t) const
+	Ray ViewportToRay(double s, double t) const
 	{
 		Vector3 rd = lens_radius * random_in_unit_disk();
 		Vector3 offset = u * rd.x + v * rd.y;
