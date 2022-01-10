@@ -45,10 +45,10 @@ public:
 		const Ray& r_in, const RaycastHit& rec, color& attenuation, Ray& scattered
 	) const override
 	{
-		Vector3 reflected = reflect(Normalized(r_in.direction()), rec.Normal);
+		Vector3 reflected = reflect(Normalized(r_in.Direction()), rec.Normal);
 		scattered = Ray(rec.Point, reflected + fuzz * RandomInUnitSphere());
 		attenuation = albedo;
-		return (Dot(scattered.direction(), rec.Normal) > 0);
+		return (Dot(scattered.Direction(), rec.Normal) > 0);
 	}
 
 public:
@@ -68,7 +68,7 @@ public:
 		attenuation = color(1.0, 1.0, 1.0);
 		double refraction_ratio = rec.IsNormalOutward ? (1.0 / ir) : ir;
 
-		Vector3 unit_direction = Normalized(r_in.direction());
+		Vector3 unit_direction = Normalized(r_in.Direction());
 		double cos_theta = fmin(Dot(-unit_direction, rec.Normal), 1.0);
 		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 

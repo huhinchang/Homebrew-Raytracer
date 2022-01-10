@@ -13,8 +13,8 @@ public:
 	{
 	}
 
-	point3 origin() const { return _origin; }
-	Vector3 direction() const { return _direction; }
+	point3 Origin() const { return _origin; }
+	Vector3 Direction() const { return _direction; }
 
 	point3 At(double t) const
 	{

@@ -32,9 +32,6 @@
     <ClInclude Include="src\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\RaycastCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

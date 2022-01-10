@@ -18,8 +18,9 @@ struct RaycastHit
 
 	inline void SetNormal(const Ray& ray, const Vector3& outwardNormal)
 	{
-		IsNormalOutward = Dot(ray.direction(), outwardNormal) < 0;
+		IsNormalOutward = Dot(ray.Direction(), outwardNormal) < 0;
 		Normal = IsNormalOutward ? outwardNormal : -outwardNormal;
+		Normal = Normalized(Normal);
 	}
 };
 

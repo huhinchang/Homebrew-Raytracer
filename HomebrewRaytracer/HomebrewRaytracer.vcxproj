@@ -125,7 +125,7 @@
     <ClInclude Include="src\material.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Utils.h" />
-    <ClInclude Include="src\sphere.h" />
+    <ClInclude Include="src\Sphere.h" />
     <ClInclude Include="src\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

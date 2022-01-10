@@ -6,30 +6,30 @@
 #include "RaycastCollider.h"
 #include "Vector3.h"
 
-class sphere : public RaycastCollider
+class Sphere : public RaycastCollider
 {
 public:
-	sphere() {}
-	sphere(point3 cen, double r, shared_ptr<material> m)
-		: center(cen), radius(r), mat_ptr(m)
+	Sphere() {}
+	Sphere(point3 center, double radius, shared_ptr<material> material)
+		: _center{ center }, _radius{ radius }, _material{ material }
 	{
 	};
 
-	virtual bool CheckCollision(
-		const Ray& r, double t_min, double t_max, RaycastHit& rec) const override;
+	virtual bool CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const override;
 
-public:
-	point3 center;
-	double radius;
-	shared_ptr<material> mat_ptr;
+private:
+	point3 _center;
+	double _radius;
+	shared_ptr<material> _material;
 };
 
-bool sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const
+bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const
 {
-	Vector3 oc = r.origin() - center;
-	auto a = r.direction().SqrMagnitude();
-	auto half_b = Dot(oc, r.direction());
-	auto c = oc.SqrMagnitude() - radius * radius;
+	// uses special quadratic formula when b = 2h
+	Vector3 oc = r.Origin() - _center;
+	auto a = r.Direction().SqrMagnitude();
+	auto half_b = Dot(oc, r.Direction());
+	auto c = oc.SqrMagnitude() - _radius * _radius;
 
 	auto discriminant = half_b * half_b - a * c;
 	if (discriminant < 0) return false;
@@ -44,12 +44,12 @@ bool sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit
 			return false;
 	}
 
+	// populate hit record
 	rec.t = root;
 	rec.Point = r.At(rec.t);
-	rec.Normal = (rec.Point - center) / radius;
-	Vector3 outward_normal = (rec.Point - center) / radius;
+	Vector3 outward_normal = (rec.Point - _center) / _radius;
 	rec.SetNormal(r, outward_normal);
-	rec.Material = mat_ptr;
+	rec.Material = _material;
 
 	return true;
 }

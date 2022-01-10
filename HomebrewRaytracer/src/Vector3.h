@@ -13,8 +13,6 @@ public:
 	Vector3(double x, double y, double z) : x{ x }, y{ y }, z{ z } {}
 
 	Vector3 operator-() const { return Vector3(-x, -y, -z); }
-	//double operator[](int i) const { return e[i]; }
-	//double& operator[](int i) { return e[i]; }
 
 	Vector3& operator+=(const Vector3 &other)
 	{
@@ -47,12 +45,12 @@ public:
 		return x * x + y * y + z * z;
 	}
 
-	inline static Vector3 random()
+	inline static Vector3 Random()
 	{
 		return Vector3(RandomDouble(), RandomDouble(), RandomDouble());
 	}
 
-	inline static Vector3 random(double min, double max)
+	inline static Vector3 Random(double min, double max)
 	{
 		return Vector3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
 	}
@@ -131,7 +129,7 @@ Vector3 RandomInUnitSphere()
 {
 	while (true)
 	{
-		auto p = Vector3::random(-1, 1);
+		auto p = Vector3::Random(-1, 1);
 		if (p.SqrMagnitude() >= 1) continue;
 		return p;
 	}
