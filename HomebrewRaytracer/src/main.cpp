@@ -2,7 +2,7 @@
 
 #include "Utils.h"
 
-#include "color.h"
+#include "Output.h"
 #include "Scene.h"
 #include "sphere.h"
 #include "camera.h"
@@ -129,7 +129,7 @@ int main()
 				Ray r = cam.get_ray(u, v);
 				pixel_color += ray_color(r, world, max_depth);
 			}
-			write_color(std::cout, pixel_color, samples_per_pixel);
+			WriteColor(std::cout, pixel_color, samples_per_pixel);
 		}
 	}
 	std::cerr << "\nDone.\n";

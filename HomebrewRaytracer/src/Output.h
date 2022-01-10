@@ -6,23 +6,23 @@
 
 #include <iostream>
 
-void write_color(std::ostream &out, color pixel_color)
+void WriteColorRaw(std::ostream &out, color pixelColor)
 {
 	// Write the translated [0,255] value of each color component.
-	out << static_cast<int>(255.999 * pixel_color.x) << ' '
-		<< static_cast<int>(255.999 * pixel_color.y) << ' '
-		<< static_cast<int>(255.999 * pixel_color.z) << '\n';
+	out << pixelColor.x << ' '
+		<< 255.999 * pixelColor.y << ' '
+		<< 255.999 * pixelColor.z << '\n';
 }
 
 // multisampled color
-void write_color(std::ostream &out, color pixel_color, int samples_per_pixel)
+void WriteColor(std::ostream &out, color pixelColor, int samplesPerPixel)
 {
-	auto r = pixel_color.x;
-	auto g = pixel_color.y;
-	auto b = pixel_color.z;
+	auto r = pixelColor.x;
+	auto g = pixelColor.y;
+	auto b = pixelColor.z;
 
 	// Divide the color by the number of samples and gamma-correct for gamma=2.0.
-	auto scale = 1.0 / samples_per_pixel;
+	auto scale = 1.0 / samplesPerPixel;
 	r = sqrt(scale * r);
 	g = sqrt(scale * g);
 	b = sqrt(scale * b);
