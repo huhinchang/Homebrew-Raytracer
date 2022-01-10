@@ -2,7 +2,7 @@
 
 // this class manages the virtual camera and the related tasks of scene sampling
 
-#include "rtweekend.h"
+#include "Utils.h"
 
 class camera
 {
@@ -17,7 +17,7 @@ public:
 		double focus_dist
 	)
 	{
-		auto theta = degrees_to_radians(vfov);
+		auto theta = Deg2Rad(vfov);
 		auto h = tan(theta / 2);
 		auto viewport_height = 2.0 * h;
 		auto viewport_width = aspect_ratio * viewport_height;

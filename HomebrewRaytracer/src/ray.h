@@ -2,7 +2,7 @@
 
 // this header contains the ray class
 
-#include "vec3.h"
+#include "Vector3.h"
 
 class ray
 {

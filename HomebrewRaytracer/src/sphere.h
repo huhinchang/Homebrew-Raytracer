@@ -4,7 +4,7 @@
 // the funky math is explained in 6.2
 
 #include "hittable.h"
-#include "vec3.h"
+#include "Vector3.h"
 
 class sphere : public hittable
 {

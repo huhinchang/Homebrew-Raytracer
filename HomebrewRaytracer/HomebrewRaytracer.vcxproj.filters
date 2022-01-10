@@ -38,13 +38,13 @@
     <ClInclude Include="src\ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rtweekend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\vec3.h">
+    <ClInclude Include="src\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

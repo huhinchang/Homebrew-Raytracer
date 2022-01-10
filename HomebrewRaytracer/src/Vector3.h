@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-using std::sqrt;
+#include "Utils.h"
 
 class Vector3
 {
@@ -51,17 +49,16 @@ public:
 
 	inline static Vector3 random()
 	{
-		return Vector3(random_double(), random_double(), random_double());
+		return Vector3(RandomDouble(), RandomDouble(), RandomDouble());
 	}
 
 	inline static Vector3 random(double min, double max)
 	{
-		return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+		return Vector3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
 	}
 
 	bool near_zero() const
 	{
-		// Return true if the vector is close to zero in all dimensions.
 		const auto s = 1e-8;
 		return (fabs(x) < s) && (fabs(y) < s) && (fabs(z) < s);
 	}
@@ -174,7 +171,7 @@ Vector3 random_in_unit_disk()
 {
 	while (true)
 	{
-		auto p = Vector3(random_double(-1, 1), random_double(-1, 1), 0);
+		auto p = Vector3(RandomDouble(-1, 1), RandomDouble(-1, 1), 0);
 		if (p.SqrMagnitude() >= 1) continue;
 		return p;
 	}

@@ -4,7 +4,7 @@
 // 1. Produce a scattered ray(or say it absorbed the incident ray).
 // 2. If scattered, say how much the ray should be attenuated.
 
-#include "rtweekend.h"
+#include "Utils.h"
 
 struct hit_record;
 
@@ -75,7 +75,7 @@ public:
 		bool cannot_refract = refraction_ratio * sin_theta > 1.0;
 		Vector3 direction;
 
-		if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random_double())
+		if (cannot_refract || reflectance(cos_theta, refraction_ratio) > RandomDouble())
 			direction = reflect(unit_direction, rec.normal);
 		else
 			direction = refract(unit_direction, rec.normal, refraction_ratio);

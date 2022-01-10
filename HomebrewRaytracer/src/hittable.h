@@ -4,7 +4,7 @@
 // intercept raycasts.
 
 #include "ray.h"
-#include "rtweekend.h"
+#include "Utils.h"
 
 class material;
 

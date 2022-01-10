@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "rtweekend.h"
+#include "Utils.h"
 
 #include "color.h"
 #include "hittable_list.h"
@@ -47,8 +47,8 @@ hittable_list random_scene()
 	{
 		for (int b = -2; b < 2; b++)
 		{
-			auto choose_mat = random_double();
-			point3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
+			auto choose_mat = RandomDouble();
+			point3 center(a + 0.9*RandomDouble(), 0.2, b + 0.9*RandomDouble());
 
 			if ((center - point3(4, 0.2, 0)).Magnitude() > 0.9)
 			{
@@ -65,7 +65,7 @@ hittable_list random_scene()
 				{
 					// metal
 					auto albedo = color::random(0.5, 1);
-					auto fuzz = random_double(0, 0.5);
+					auto fuzz = RandomDouble(0, 0.5);
 					sphere_material = make_shared<metal>(albedo, fuzz);
 					world.add(make_shared<sphere>(center, 0.2, sphere_material));
 				}
@@ -125,8 +125,8 @@ int main()
 			for (int s = 0; s < samples_per_pixel; ++s)
 			{
 				// u & v are random positions within the pixel
-				auto u = (i + random_double()) / (image_width - 1);
-				auto v = (j + random_double()) / (image_height - 1);
+				auto u = (i + RandomDouble()) / (image_width - 1);
+				auto v = (j + RandomDouble()) / (image_height - 1);
 				ray r = cam.get_ray(u, v);
 				pixel_color += ray_color(r, world, max_depth);
 			}
