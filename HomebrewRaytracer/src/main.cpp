@@ -3,7 +3,7 @@
 #include "Utils.h"
 
 #include "color.h"
-#include "hittable_list.h"
+#include "Scene.h"
 #include "sphere.h"
 #include "camera.h"
 #include "RaycastCollider.h"
@@ -36,12 +36,12 @@ color ray_color(const Ray& r, const RaycastCollider& world, int depth)
 	return (1.0 - t)*color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
-hittable_list random_scene()
+Scene random_scene()
 {
-	hittable_list world;
+	Scene scene;
 
 	auto ground_material = make_shared<Diffuse>(color(0.5, 0.5, 0.5));
-	world.add(make_shared<Sphere>(point3(0, -1000, 0), 1000, ground_material));
+	scene.AddCollider(make_shared<Sphere>(point3(0, -1000, 0), 1000, ground_material));
 
 	for (int a = -2; a < 2; a++)
 	{
@@ -59,7 +59,7 @@ hittable_list random_scene()
 					// diffuse
 					auto albedo = color::Random() * color::Random();
 					sphere_material = make_shared<Diffuse>(albedo);
-					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+					scene.AddCollider(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 				else if (choose_mat < 0.95)
 				{
@@ -67,27 +67,27 @@ hittable_list random_scene()
 					auto albedo = color::Random(0.5, 1);
 					auto fuzz = RandomDouble(0, 0.5);
 					sphere_material = make_shared<Metal>(albedo, fuzz);
-					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+					scene.AddCollider(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 				else
 				{
 					// glass
 					sphere_material = make_shared<Glass>(1.5);
-					world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+					scene.AddCollider(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 			}
 		}
 	}
 
-	auto glassMat = make_shared<Glass>(1.5, color(1, 0, 0));
+	auto glassMat = make_shared<Glass>(1.5, color(1, 0.5, 0.5));
 	auto diffuseMat = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
 	auto metalMat = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
 
-	world.add(make_shared<Sphere>(point3(-4, 1, 0), 1.0, diffuseMat));
-	world.add(make_shared<Sphere>(point3(0, 1, 0), 1.0, metalMat));
-	world.add(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
+	scene.AddCollider(make_shared<Sphere>(point3(-4, 1, 0), 1.0, diffuseMat));
+	scene.AddCollider(make_shared<Sphere>(point3(0, 1, 0), 1.0, metalMat));
+	scene.AddCollider(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
 
-	return world;
+	return scene;
 }
 
 int main()

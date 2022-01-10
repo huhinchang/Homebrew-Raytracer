@@ -121,7 +121,7 @@
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\color.h" />
     <ClInclude Include="src\RaycastCollider.h" />
-    <ClInclude Include="src\hittable_list.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Ray.h" />
     <ClInclude Include="src\Utils.h" />
