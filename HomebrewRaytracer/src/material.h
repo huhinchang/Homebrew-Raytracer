@@ -97,3 +97,22 @@ private:
 		return r0 + (1 - r0)*pow((1 - cosine), 5);
 	}
 };
+
+class Fog : public Material
+{
+public:
+	Fog(const color& albedo) : _albedo{ albedo } {}
+
+	virtual bool Scatter(
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
+	) const override
+	{
+	if (RandomDouble() )
+		scattered = Ray(incidentRayHitInfo.Point, RandomInUnitSphere());
+		albedo = _albedo;
+		return true;
+	}
+
+private:
+	color _albedo;
+};

@@ -4,10 +4,11 @@
 
 #include "Output.h"
 #include "Scene.h"
-#include "sphere.h"
-#include "camera.h"
+#include "Volume.h"
+#include "Sphere.h"
+#include "Camera.h"
 #include "RaycastCollider.h"
-#include "material.h"
+#include "Material.h"
 
 // cd "C:\Users\user\Desktop\Other devs\HomebrewRaytracer\Debug"
 // "HomebrewRaytracer.exe" > ../Renders/asdf.ppm
@@ -82,10 +83,12 @@ Scene random_scene()
 	auto glassMat = make_shared<Glass>(1.5, color(1, 0.5, 0.5));
 	auto diffuseMat = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
 	auto metalMat = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
+	auto fogMat = make_shared<Fog>(color(1, 0.5, 0.5));
 
 	scene.AddCollider(make_shared<Sphere>(point3(-4, 1, 0), 1.0, diffuseMat));
 	scene.AddCollider(make_shared<Sphere>(point3(0, 1, 0), 1.0, metalMat));
-	scene.AddCollider(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
+	//scene.AddCollider(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
+	scene.AddCollider(make_shared<Volume>(point3(4, 1, 0), 1.0, fogMat, 0.5));
 
 	return scene;
 }
@@ -96,7 +99,7 @@ int main()
 	const auto aspect_ratio = 3.0 / 2.0;
 	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspect_ratio);
-	const int samples_per_pixel = 5;
+	const int samples_per_pixel = 100;
 	const int max_depth = 5;
 
 	// World

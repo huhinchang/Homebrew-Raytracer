@@ -22,6 +22,11 @@ inline double Deg2Rad(double degrees)
 	return degrees * pi / 180.0;
 }
 
+inline double Lerp(double a, double b, double t)
+{
+	return a + (b-a) * t;
+}
+
 // inclusive min, exclusive max
 inline double RandomDouble(double min = 0, double max = 1)
 {

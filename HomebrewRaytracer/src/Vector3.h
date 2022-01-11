@@ -106,6 +106,13 @@ inline Vector3 Cross(const Vector3 &u, const Vector3 &v)
 		u.x * v.y - u.y * v.x);
 }
 
+inline Vector3 Lerp(const Vector3 &u, const Vector3 &v, double t)
+{
+	return Vector3(Lerp(u.x, v.x, t),
+		Lerp(u.y, v.y, t),
+		Lerp(u.z, v.z, t));
+}
+
 inline Vector3 Normalized(Vector3 v)
 {
 	return v / v.Magnitude();

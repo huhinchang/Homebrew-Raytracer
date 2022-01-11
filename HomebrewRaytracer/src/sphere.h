@@ -18,10 +18,11 @@ public:
 private:
 	point3 _center;
 	double _radius;
+protected:
 	shared_ptr<Material> _material;
 };
 
-bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& rec) const
+bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& hitInfo) const
 {
 	// uses special quadratic formula when b = 2h
 	Vector3 oc = r.Origin() - _center;
@@ -43,11 +44,11 @@ bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit
 	}
 
 	// populate hit record
-	rec.t = root;
-	rec.Point = r.At(rec.t);
-	Vector3 outward_normal = (rec.Point - _center) / _radius;
-	rec.SetNormal(r, outward_normal);
-	rec.Material = _material;
+	hitInfo.t = root;
+	hitInfo.Point = r.At(hitInfo.t);
+	Vector3 outward_normal = (hitInfo.Point - _center) / _radius;
+	hitInfo.SetNormal(r, outward_normal);
+	hitInfo.Material = _material;
 
 	return true;
 }
