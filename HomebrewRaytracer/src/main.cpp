@@ -44,9 +44,9 @@ Scene random_scene()
 	auto ground_material = make_shared<Diffuse>(color(0.5, 0.5, 0.5));
 	scene.AddCollider(make_shared<Sphere>(point3(0, -1000, 0), 1000, ground_material));
 
-	for (int a = -2; a < 2; a++)
+	for (int a = -3; a < 3; a++)
 	{
-		for (int b = -2; b < 2; b++)
+		for (int b = -3; b < 3; b++)
 		{
 			auto choose_mat = RandomDouble();
 			point3 center(a + 0.9*RandomDouble(), 0.2, b + 0.9*RandomDouble());
@@ -80,14 +80,14 @@ Scene random_scene()
 		}
 	}
 
-	auto glassMat = make_shared<Glass>(1.5, color(1, 0.5, 0.5));
+	auto glassMat = make_shared<Glass>(1.5, color(0.8, 1, 0.9));
 	auto diffuseMat = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
 	auto metalMat = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
 	auto fogMat = make_shared<Fog>(color(1, 0.5, 0.5));
 
-	scene.AddCollider(make_shared<Sphere>(point3(-4, 1, 0), 1.0, diffuseMat));
+	scene.AddCollider(make_shared<Sphere>(point3(0, 1, -2), 1.0, diffuseMat));
 	scene.AddCollider(make_shared<Sphere>(point3(0, 1, 0), 1.0, metalMat));
-	//scene.AddCollider(make_shared<Sphere>(point3(4, 1, 0), 1.0, glassMat));
+	scene.AddCollider(make_shared<Sphere>(point3(4, 1, 2), 1.0, glassMat));
 	scene.AddCollider(make_shared<Volume>(point3(4, 1, 0), 1.0, fogMat, 0.5));
 
 	return scene;
@@ -99,8 +99,8 @@ int main()
 	const auto aspect_ratio = 3.0 / 2.0;
 	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspect_ratio);
-	const int samples_per_pixel = 100;
-	const int max_depth = 5;
+	const int samples_per_pixel = 20;
+	const int max_depth = 10;
 
 	// World
 	auto world = random_scene();

@@ -18,16 +18,15 @@ public:
 private:
 	point3 _center;
 	double _radius;
-protected:
 	shared_ptr<Material> _material;
 };
 
-bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit& hitInfo) const
+bool Sphere::CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const
 {
 	// uses special quadratic formula when b = 2h
-	Vector3 oc = r.Origin() - _center;
-	auto a = r.Direction().SqrMagnitude();
-	auto half_b = Dot(oc, r.Direction());
+	Vector3 oc = ray.Origin() - _center;
+	auto a = ray.Direction().SqrMagnitude();
+	auto half_b = Dot(oc, ray.Direction());
 	auto c = oc.SqrMagnitude() - _radius * _radius;
 
 	auto discriminant = half_b * half_b - a * c;
@@ -36,18 +35,18 @@ bool Sphere::CheckCollision(const Ray& r, double t_min, double t_max, RaycastHit
 
 	// Find the nearest root that lies in the acceptable range.
 	auto root = (-half_b - sqrtd) / a;
-	if (root < t_min || t_max < root)
+	if (root < tMin || tMax < root)
 	{
 		root = (-half_b + sqrtd) / a;
-		if (root < t_min || t_max < root)
+		if (root < tMin || tMax < root)
 			return false;
 	}
 
 	// populate hit record
 	hitInfo.t = root;
-	hitInfo.Point = r.At(hitInfo.t);
+	hitInfo.Point = ray.At(hitInfo.t);
 	Vector3 outward_normal = (hitInfo.Point - _center) / _radius;
-	hitInfo.SetNormal(r, outward_normal);
+	hitInfo.SetNormal(ray, outward_normal);
 	hitInfo.Material = _material;
 
 	return true;
