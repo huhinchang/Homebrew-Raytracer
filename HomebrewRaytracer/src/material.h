@@ -60,16 +60,18 @@ private:
 class Glass : public Material
 {
 public:
-	Glass(double ior, color albedo = color(1.0, 1.0, 1.0)) : _ior(ior), _albedo{ albedo } {}
+	Glass(double ior, color albedo, double roughness) : _ior(ior), _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
 
 	virtual bool Scatter(
 		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
 	) const override
 	{
+		auto fuzz = _roughness * RandomInUnitSphere();
+
 		albedo = _albedo;
 		double refractionRatio = incidentRayHitInfo.IsNormalOutward ? (1.0 / _ior) : _ior;
 
-		Vector3 unit_direction = incidentRay.Direction();
+		Vector3 unit_direction = incidentRay.Direction() + fuzz;
 		double cos_theta = fmin(Dot(-unit_direction, incidentRayHitInfo.Normal), 1.0);
 		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
@@ -81,6 +83,7 @@ public:
 		else
 			direction = Refract(unit_direction, incidentRayHitInfo.Normal, refractionRatio);
 
+		
 		scattered = Ray(incidentRayHitInfo.Point, direction);
 		return true;
 	}
@@ -88,6 +91,7 @@ public:
 private:
 	color _albedo;
 	double _ior; // Index of Refraction
+	double _roughness;
 
 	static double reflectance(double cosine, double ref_idx)
 	{

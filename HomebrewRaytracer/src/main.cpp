@@ -73,14 +73,14 @@ Scene random_scene()
 				else
 				{
 					// glass
-					sphere_material = make_shared<Glass>(1.5);
+					sphere_material = make_shared<Glass>(1.5, color::Random(), 0.0);
 					scene.AddCollider(make_shared<Sphere>(center, 0.2, sphere_material));
 				}
 			}
 		}
 	}
 
-	auto glassMat = make_shared<Glass>(1.5, color(0.8, 1, 0.9));
+	auto glassMat = make_shared<Glass>(1.5, color(0.8, 1, 0.9), 0.05);
 	auto diffuseMat = make_shared<Diffuse>(color(0.4, 0.2, 0.1));
 	auto metalMat = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.0);
 	auto fogMat = make_shared<Fog>(color(1, 0.5, 0.5));
@@ -100,7 +100,7 @@ int main()
 	const int image_width = 400;
 	const int image_height = static_cast<int>(image_width / aspect_ratio);
 	const int samples_per_pixel = 20;
-	const int max_depth = 10;
+	const int max_depth = 5;
 
 	// World
 	auto world = random_scene();
