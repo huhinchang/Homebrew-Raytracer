@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-void WriteColorRaw(std::ostream &out, color pixelColor)
+void WriteColorRaw(std::ostream &out, Color pixelColor)
 {
 	// Write the translated [0,255] value of each color component.
 	out << pixelColor.x << ' '
@@ -15,7 +15,7 @@ void WriteColorRaw(std::ostream &out, color pixelColor)
 }
 
 // multisampled color
-void WriteColor(std::ostream &out, color pixelColor, int samplesPerPixel)
+void WriteColor(std::ostream &out, Color pixelColor, int samplesPerPixel)
 {
 	auto r = pixelColor.x;
 	auto g = pixelColor.y;
