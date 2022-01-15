@@ -12,15 +12,15 @@ class Material
 {
 public:
 	// if false, ray was absorbed.
-	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered) const = 0;
+	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, Color& albedo, Ray& scattered) const = 0;
 };
 
 class Diffuse : public Material
 {
 public:
-	Diffuse(const color& albedo) : _albedo{ albedo } {}
+	Diffuse(const Color& albedo) : _albedo{ albedo } {}
 
-	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered) const override
+	virtual bool Scatter(const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, Color& albedo, Ray& scattered) const override
 	{
 		auto scatterDir = incidentRayHitInfo.Normal + RandomUnitVector();
 		if (scatterDir.SqrMagnitude() < 1e-4)
@@ -32,16 +32,16 @@ public:
 	}
 
 public:
-	color _albedo;
+	Color _albedo;
 };
 
 class Metal : public Material
 {
 public:
-	Metal(const color& albedo, double roughness) : _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
+	Metal(const Color& albedo, double roughness) : _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
 
 	virtual bool Scatter(
-		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, Color& albedo, Ray& scattered
 	) const override
 	{
 		auto reflected = ReflectAlongNormal(Normalized(incidentRay.Direction()), incidentRayHitInfo.Normal);
@@ -53,17 +53,17 @@ public:
 	}
 
 private:
-	color _albedo;
+	Color _albedo;
 	double _roughness;
 };
 
 class Glass : public Material
 {
 public:
-	Glass(double ior, color albedo, double roughness) : _ior(ior), _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
+	Glass(double ior, Color albedo, double roughness) : _ior(ior), _albedo{ albedo }, _roughness{ Clamp(roughness, 0, 1) } {}
 
 	virtual bool Scatter(
-		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, Color& albedo, Ray& scattered
 	) const override
 	{
 		auto fuzz = _roughness * RandomInUnitSphere();
@@ -89,7 +89,7 @@ public:
 	}
 
 private:
-	color _albedo;
+	Color _albedo;
 	double _ior; // Index of Refraction
 	double _roughness;
 
@@ -105,10 +105,10 @@ private:
 class Fog : public Material
 {
 public:
-	Fog(const color& albedo) : _albedo{ albedo } {}
+	Fog(const Color& albedo) : _albedo{ albedo } {}
 
 	virtual bool Scatter(
-		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, color& albedo, Ray& scattered
+		const Ray& incidentRay, const RaycastHit& incidentRayHitInfo, Color& albedo, Ray& scattered
 	) const override
 	{
 	if (RandomDouble() )
@@ -118,5 +118,5 @@ public:
 	}
 
 private:
-	color _albedo;
+	Color _albedo;
 };

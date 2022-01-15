@@ -8,8 +8,8 @@ class Camera
 {
 public:
 	Camera(
-		point3 lookfrom,
-		point3 lookat,
+		Point3 lookfrom,
+		Point3 lookat,
 		Vector3 vup,
 		double vfov, // vertical field-of-view in degrees
 		double aspect_ratio,
@@ -47,8 +47,8 @@ public:
 	}
 
 private:
-	point3 origin;
-	point3 lower_left_corner;
+	Point3 origin;
+	Point3 lower_left_corner;
 	Vector3 horizontal;
 	Vector3 vertical;
 

@@ -8,7 +8,7 @@
 class Volume : public RaycastCollider
 {
 public:
-	Volume(point3 center, double radius, shared_ptr<Material> material, double density)
+	Volume(Point3 center, double radius, shared_ptr<Material> material, double density)
 		: _center{ center }, _radius{ radius }, _material{ material }, _density{ Clamp(density, 0, infinity) }
 	{
 	};
@@ -16,7 +16,7 @@ public:
 	virtual bool CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const override;
 
 private:
-	point3 _center;
+	Point3 _center;
 	double _radius;
 	shared_ptr<Material> _material;
 	double _density;

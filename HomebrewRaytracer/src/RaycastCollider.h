@@ -10,7 +10,7 @@ class Material;
 
 struct RaycastHit
 {
-	point3 Point;
+	Point3 Point;
 	Vector3 Normal;
 	shared_ptr<Material> Material;
 	double t;

@@ -8,7 +8,7 @@
 class Sphere : public RaycastCollider
 {
 public:
-	Sphere(point3 center, double radius, shared_ptr<Material> material)
+	Sphere(Point3 center, double radius, shared_ptr<Material> material)
 		: _center{ center }, _radius{ radius }, _material{ material }
 	{
 	};
@@ -16,7 +16,7 @@ public:
 	virtual bool CheckCollision(const Ray& ray, double tMin, double tMax, RaycastHit& hitInfo) const override;
 
 private:
-	point3 _center;
+	Point3 _center;
 	double _radius;
 	shared_ptr<Material> _material;
 };
