@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>

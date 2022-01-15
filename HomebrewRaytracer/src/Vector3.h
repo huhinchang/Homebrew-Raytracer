@@ -25,8 +25,8 @@ public:
 };
 
 // Type aliases for vec3
-using point3 = Vector3;   // 3D point
-using color = Vector3;    // RGB color
+using Point3 = Vector3;   // 3D point
+using Color = Vector3;    // RGB color
 
 // vec3 Utility Functions
 Vector3 operator+(const Vector3 &u, const Vector3 &v);
